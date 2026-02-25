@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Corazoncito</title>
+    <style>
+        body {
+            margin: 0;
+            background: radial-gradient(circle at center, #1a0633 0%, #000000 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Pantalla de Misterio */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+
+        #overlay h2 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff2a5f;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .btn-misterio {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: #ff2a5f;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff2a5f;
+            transition: transform 0.3s;
+        }
+
+        .btn-misterio:hover { transform: scale(1.1); }
+
+        /* Estrellas de fondo */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        #scene {
+            position: relative;
+            width: 900px;
+            height: 750px;
+        }
+
+        .character {
+            position: absolute;
+            left: 30px;
+            top: 250px;
+            width: 180px;
+            z-index: 20;
+        }
+
+        #heart-container { position: absolute; width: 100%; height: 100%; }
+
+        .heart {
+            position: absolute;
+            color: #ff2a5f;
+            font-size: 24px;
+            text-shadow: 0 0 10px #ff2a5f, 0 0 25px #ff4d7d;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+
+        /* Confeti */
+        .confetti {
+            position: absolute;
+            width: 10px; height: 10px;
+            z-index: 30;
+            animation: fall var(--d) linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .pulse { animation: heartbeat 1.5s infinite ease-in-out; }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.08); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.12); }
+            100% { transform: scale(1); }
+        }
+
+        .message-container {
+            position: absolute;
+            left: 510px; top: 620px; 
+            transform: translateX(-50%);
+            width: 100%;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .message {
+            color: #ffffff;
+            font-size: 52px;
+            font-weight: bold;
+            text-shadow: 0 0 20px #ff2a5f, 0 0 40px #ff2a5f;
+            opacity: 0;
+            transition: opacity 2s ease-in, transform 1.5s ease-out;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            transform: translateY(40px);
+        }
+
+        .message.show { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <h2>Hola Corazoncito... <br> ¿Tienes un segundo para mí? ❤️</h2>
+        <button class="btn-misterio" onclick="descubrir()">¡SÍ, CLARO!</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="MILO J - M.A.I (Video Oficial) (1).mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="scene">
+        <img src="tenor.gif" id="bear" class="character">
+        <div id="heart-container"></div>
+        <div class="message-container">
+            <div id="message" class="message">TE AMO CORAZONCITO</div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('bgMusic');
+        const overlay = document.getElementById('overlay');
+        const message = document.getElementById('message');
+        const container = document.getElementById('heart-container');
+
+        function descubrir() {
+            // Quitamos el velo de misterio
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 1000);
+            
+            // Suena Milo J
+            audio.play();
+            
+            // Empieza la magia
+            startShooting();
+        }
+
+        // Crear estrellas
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = star.style.height = Math.random() * 3 + 'px';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.setProperty('--duration', Math.random() * 3 + 1 + 's');
+            document.body.appendChild(star);
+        }
+
+        function createConfetti() {
+            const colors = ['#ff2a5f', '#ff7b9c', '#ffffff', '#ffb3c6'];
+            for (let i = 0; i < 100; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.top = '-10px';
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.setProperty('--d', Math.random() * 3 + 2 + 's');
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 5000);
+            }
+        }
+
+        const startX = 145; 
+        const startY = 350;
+        const numPoints = 50; 
+        const scale = 14;     
+        const offsetX = 510;  
+        const offsetY = 220;  
+        const speedMs = 120;  
+
+        const heartPositions = [];
+        for (let i = Math.PI; i < Math.PI * 3; i += (Math.PI * 2) / numPoints) {
+            let x = 16 * Math.pow(Math.sin(i), 3);
+            let y = -(13 * Math.cos(i) - 5 * Math.cos(2 * i) - 2 * Math.cos(3 * i) - Math.cos(4 * i));
+            heartPositions.push({ x: offsetX + (x * scale), y: offsetY + (y * scale) });
+        }
+
+        let currentShot = 0;
+
+        function startShooting() {
+            const interval = setInterval(() => {
+                if (currentShot >= heartPositions.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        message.classList.add('show');
+                        container.classList.add('pulse');
+                        createConfetti();
+                    }, 500);
+                    return;
+                }
+
+                const target = heartPositions[currentShot];
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                heart.style.left = startX + 'px';
+                heart.style.top = startY + 'px';
+                container.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.style.left = target.x + 'px';
+                    heart.style.top = target.y + 'px';
+                }, 10);
+                currentShot++;
+            }, speedMs);
+        }
+    </script>
+</body>
+</html>
