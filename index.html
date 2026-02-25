@@ -2,13 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para mi Corazoncito</title>
     <style>
         body {
             margin: 0;
             background: radial-gradient(circle at center, #1a0633 0%, #000000 100%);
             height: 100vh;
+            width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,66 +32,61 @@
 
         #overlay h2 {
             color: white;
-            font-size: clamp(22px, 5vw, 30px);
-            margin-bottom: 25px;
-            text-shadow: 0 0 15px #ff2a5f;
+            font-size: clamp(20px, 5vw, 28px);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff2a5f;
             text-align: center;
             padding: 0 20px;
         }
 
         .btn-misterio {
-            padding: 15px 45px;
-            font-size: 20px;
+            padding: 15px 40px;
+            font-size: 18px;
             background: #ff2a5f;
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 25px #ff2a5f;
-            font-weight: bold;
+            box-shadow: 0 0 20px #ff2a5f;
         }
 
         #scene {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            max-width: 900px;
-            max-height: 800px;
-        }
-
-        .character {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: clamp(100px, 22vw, 160px);
-            z-index: 20;
-        }
-
-        #heart-container { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        .character {
+            position: absolute;
+            left: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: clamp(100px, 20vw, 150px);
+            z-index: 20;
+        }
+
+        #heart-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
         .heart {
             position: absolute;
             color: #ff2a5f;
-            font-size: clamp(18px, 4vw, 26px);
+            font-size: clamp(18px, 4vw, 24px);
             text-shadow: 0 0 10px #ff2a5f;
-            transition: all 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
         }
 
-        /* Texto perfectamente centrado */
         .message-container {
             position: absolute;
-            left: 50%;
-            bottom: 12%;
-            transform: translateX(-50%);
+            bottom: 15%;
             width: 100%;
             text-align: center;
             z-index: 50;
@@ -98,32 +94,27 @@
 
         .message {
             color: #ffffff;
-            font-size: clamp(24px, 7vw, 50px);
+            font-size: clamp(22px, 7vw, 45px);
             font-weight: bold;
-            text-shadow: 0 0 20px #ff2a5f, 0 0 40px #ff2a5f;
+            text-shadow: 0 0 20px #ff2a5f;
             opacity: 0;
-            transition: opacity 2s ease-in, transform 1.5s ease-out;
+            transition: opacity 2s ease-in;
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            display: inline-block;
-            width: 100%;
         }
 
-        .message.show { 
-            opacity: 1; 
-            transform: translateY(0);
-        }
+        .message.show { opacity: 1; }
 
         .star {
             position: absolute;
             background: white;
             border-radius: 50%;
-            opacity: 0.4;
+            opacity: 0.5;
             animation: twinkle var(--duration) infinite ease-in-out;
         }
 
         @keyframes twinkle {
             0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
         .confetti {
@@ -134,20 +125,20 @@
         }
 
         @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
 
         .pulse { animation: heartbeat 1.5s infinite ease-in-out; }
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
         }
     </style>
 </head>
 <body>
 
     <div id="overlay">
-        <h2>Hola Corazoncito... ❤️<br>¿Tienes un segundo para mí?</h2>
+        <h2>Hola Corazoncito... <br> ¿Tienes un segundo para mí? ❤️</h2>
         <button class="btn-misterio" onclick="descubrir()">¡SÍ, CLARO!</button>
     </div>
 
@@ -176,10 +167,11 @@
             startShooting();
         }
 
-        for (let i = 0; i < 70; i++) {
+        // Estrellas fijas al fondo
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.width = star.style.height = Math.random() * 3 + 'px';
+            star.style.width = star.style.height = Math.random() * 2 + 'px';
             star.style.left = Math.random() * 100 + 'vw';
             star.style.top = Math.random() * 100 + 'vh';
             star.style.setProperty('--duration', Math.random() * 3 + 1 + 's');
@@ -187,12 +179,12 @@
         }
 
         function createConfetti() {
-            const colors = ['#ff2a5f', '#ff7b9c', '#ffffff', '#ffb3c6'];
-            for (let i = 0; i < 80; i++) {
+            const colors = ['#ff2a5f', '#ff7b9c', '#ffffff'];
+            for (let i = 0; i < 60; i++) {
                 const c = document.createElement('div');
                 c.className = 'confetti';
                 c.style.left = Math.random() * 100 + 'vw';
-                c.style.top = '-10px';
+                c.style.top = '-5vh';
                 c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 c.style.setProperty('--d', Math.random() * 3 + 2 + 's');
                 document.body.appendChild(c);
@@ -201,18 +193,19 @@
         }
 
         function startShooting() {
-            const scene = document.getElementById('scene');
             const isMobile = window.innerWidth < 600;
+            const sceneW = window.innerWidth;
+            const sceneH = window.innerHeight;
+
+            // Punto de salida desde el oso
+            const startX = sceneW * 0.15; 
+            const startY = sceneH * 0.5;
             
-            // Origen de los corazones (desde el oso)
-            const startX = isMobile ? 60 : 100; 
-            const startY = scene.offsetHeight / 2 + 20;
-            
-            const numPoints = 50; 
-            const scale = isMobile ? (window.innerWidth / 50) : 15;     
-            const offsetX = scene.offsetWidth / 2;  
-            const offsetY = scene.offsetHeight / 2.5;  
-            const speedMs = 120;  
+            const numPoints = 45; 
+            const scale = isMobile ? (sceneW / 50) : 15;     
+            const offsetX = sceneW / 2;  
+            const offsetY = sceneH / 2.2;  
+            const speedMs = 130;  
 
             const heartPositions = [];
             for (let i = Math.PI; i < Math.PI * 3; i += (Math.PI * 2) / numPoints) {
@@ -229,7 +222,7 @@
                         message.classList.add('show');
                         container.classList.add('pulse');
                         createConfetti();
-                    }, 600);
+                    }, 500);
                     return;
                 }
 
@@ -244,7 +237,7 @@
                 setTimeout(() => {
                     heart.style.left = target.x + 'px';
                     heart.style.top = target.y + 'px';
-                }, 20);
+                }, 10);
                 currentShot++;
             }, speedMs);
         }
